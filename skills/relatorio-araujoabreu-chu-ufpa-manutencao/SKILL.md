@@ -1,6 +1,6 @@
 ---
 name: relatorio-araujoabreu-chu-ufpa-manutencao
-description: Gera o Relatório de Avaliação de Serviços (IMR) mensal do contrato de manutenção do CHU-UFPA/EBSERH (rede de ar comprimido, refrigeração etc.), a partir do PDF de folha de ponto/frequência dos funcionários e de dados fornecidos manualmente (chamados corretivos, manutenções preventivas, OF/OS, mão de obra). Use esta skill sempre que o usuário mencionar "relatório de fiscalização", "folha de ponto", "frequência dos funcionários", "indicador de disponibilidade/DSC", "glosa", "IMR", "OF/OS do contrato", ou pedir para apurar faltas de funcionários e calcular o valor devido no mês — mesmo que ele não peça explicitamente por "usar a skill". Também use para checar/atualizar o calendário de dias úteis (feriados de Belém-PA) usado no cálculo.
+description: Gera o Relatório de Avaliação de Serviços (IMR) mensal do contrato de manutenção do CHU-UFPA/EBSERH (rede de ar comprimido, refrigeração etc.), a partir do PDF de folha de ponto/frequência dos funcionários e de dados fornecidos manualmente (chamados corretivos, manutenções preventivas, OF/OS, mão de obra). Use esta skill sempre que o usuário mencionar "relatório de fiscalização", "folha de ponto", "frequência dos funcionários", "indicador de disponibilidade/DSC", "glosa", "IMR", "OF/OS do contrato", ou pedir para apurar faltas de funcionários, fazer a "análise da frequência"/"relatório de faltas" do mês, ou calcular o valor devido no mês — mesmo que ele não peça explicitamente por "usar a skill". Também use para checar/atualizar o calendário de dias úteis (feriados de Belém-PA) usado no cálculo.
 ---
 
 # Fiscalização mensal — contrato de manutenção CHU-UFPA
@@ -17,6 +17,8 @@ dois indicadores (que dependem de números que só o fiscal tem) prontos pra pre
 
 ## Fluxo completo (siga nesta ordem)
 
+Dependências Python: `pip install pdfplumber openpyxl` (se faltarem no ambiente).
+
 ### Passo 1 — Extrair a folha de ponto do PDF
 ```bash
 python3 scripts/extract_ponto.py <caminho_do_pdf_de_ponto> --out ponto_extraido.json
@@ -25,17 +27,21 @@ Isso lê o PDF por coordenadas de texto (robusto a colunas que aparecem/somem en
 como a coluna "Saldo") e gera um JSON com um registro por colaborador por dia: horários, horas
 normais e o texto de Motivo/Observação.
 
-**Sempre confira o `stderr`** — ele informa quantos funcionários foram extraídos. Se o número
-não bater com o esperado (ex: a lista de funcionários enviada pelo usuário), avise o usuário
-antes de prosseguir; pode ser que a página não tenha sido reconhecida (avisa no JSON com
-`"aviso": "cabeçalho de tabela não localizado nesta página"`).
+**Sempre confira o `stderr`** — ele informa quantos funcionários foram extraídos. Se alguma
+página não foi reconhecida, o JSON avisa com `"aviso": "cabeçalho de tabela não localizado nesta
+página"` — avise o usuário antes de prosseguir. É normal o ponto ter mais gente que a relação
+(outros contratos, coberturas): quem fica fora da relação é tratado no Passo 2.
+
+**A Relação de Funcionários do mês é obrigatória** (planilha .xlsx/.csv da contratada, com
+colunas NOME FUNCIONÁRIO, FUNÇÃO, DATA ADMISSÃO, DEMISSÃO, OBSERVAÇÃO). Se o usuário não mandou,
+peça antes do Passo 2. Se vier como imagem/texto, monte você mesmo um .csv com essas colunas.
 
 ### Passo 2 — Calcular dias úteis, faltas e o indicador 3 (DSC)
 ```bash
 python3 scripts/calc_indicador3.py ponto_extraido.json --mes 7 --ano 2026 \
     --feriados references/feriados_belem.json \
     --horas-dia 8.8 --qtd-funcionarios 27 \
-    [--employee-list lista_funcionarios.json] \
+    --relacao <relacao_funcionarios.xlsx> \
     --out indicador3.json
 ```
 Regras de negócio já embutidas (confirmadas com o usuário, não pergunte de novo):
@@ -49,18 +55,49 @@ Regras de negócio já embutidas (confirmadas com o usuário, não pergunte de n
   trabalhou a tarde).
 - Sábado, domingo e feriado **nunca contam**, mesmo que o motivo do ponto diga outra coisa.
 
-Se o usuário fornecer uma lista de funcionários esperados (imagem, Excel ou texto — extraia os
-nomes você mesmo se vier como imagem/Excel), passe em `--employee-list` como um JSON de lista de
-nomes (`["FULANO DA SILVA", ...]`) pra conferência automática de quem está/não está no ponto.
+- **Só quem está na relação conta.** Com `--relacao`, o script casa cada nome da relação com o
+  ponto (tolera nomes do meio abreviados, ex: "EUTHYMIOS M D S PAPASPIROPOULO" = "EUTHYMIOS MAX
+  DA SILVA PAPASPIROPAULOS"; não casa nomes ambíguos). Quem está no ponto e fora da relação vai
+  pra `fora_da_relacao` e **não entra** no total nem nas tabelas — só é informado.
+- Observação da relação: "Aditivo" = posto do Termo Aditivo; "Aditivo (Fulano)" = o ponto do
+  posto está registrado sob o nome "Fulano" (usa as faltas do Fulano); "Cobrir faltas" = função
+  de cobertura.
+- Dias antes da admissão não contam; dias depois do desligamento contam e saem marcados como
+  "sem motivo (pós-desligamento)".
 
-**O total de faltas calculado aqui é uma SUGESTÃO.** Sempre mostre pro usuário a lista de faltas
-por funcionário (o campo `funcionarios[].faltas`) e o total sugerido antes de seguir pro relatório
-final — ele decide manualmente o número que efetivamente entra na fórmula (pode reduzir por causa
-de alguma compensação, erro de ponto, etc.). Não pule essa revisão.
+### Passo 2b — Entregar a análise de frequência (as duas tabelas)
+```bash
+python3 scripts/gerar_tabelas_frequencia.py indicador3.json
+```
+Imprime duas tabelas em texto separado por TAB. **Esta é a saída da análise de frequência:**
+responda no chat com cada tabela num bloco de código (```` ``` ````) copiado **exatamente** como
+o script imprimiu (sem converter pra tabela Markdown, sem trocar TAB por espaço), e diga pro
+usuário colar na célula A1 do Excel. **Não gere arquivo** (.xlsx/.docx) pra isso, a não ser que
+ele peça.
 
-**Atenção a anomalias**: se aparecer um dia com `horas_normais: "00:00"` e `motivo: ""` (vazio)
-apesar de ter horário de entrada/saída registrado, isso é estranho — sinalize pro usuário como
-possível erro no sistema de ponto, não uma falta real óbvia.
+1. **ANÁLISE DA FREQUÊNCIA** — todos da relação, ordem alfabética: Nome | Função | Observação |
+   SUBSTITUTO (SUBSTITUTO fica vazio; o fiscal preenche).
+2. **RELATÓRIO DE FALTAS MÊS <MÊS>** — quem teve falta, quem não consta no ponto (Faltas em
+   branco + "verificar"), quem cobre faltas, postos do Termo Aditivo e desligados; ordem
+   decrescente de faltas: Funcionário | Função | Faltas (0,00) | Detalhe. No fim, uma linha
+   SUBTOTAL por função e a linha TOTAL.
+
+Férias contam como falta (regra do contrato — confirmado com o usuário). Depois das tabelas,
+liste em poucas linhas: o total de faltas, o DSC sugerido (do `indicador3.json`), quem está na
+relação e não consta no ponto, e quem está no ponto fora da relação (com as faltas que teria —
+só informativo). Isso sai do `stderr` do script.
+
+**O total de faltas é uma SUGESTÃO.** O usuário decide o número que efetivamente entra na fórmula
+do DSC (pode reduzir por compensação, erro de ponto etc.). Não siga pro relatório final sem essa
+confirmação.
+
+**Atenção a anomalias**: "sem motivo, com marcação de ponto (verificar)" no Detalhe = dia com
+horas normais 00:00, sem motivo, mas com horário registrado — sinalize como possível erro no
+sistema de ponto. "sem registro de ponto e sem motivo" = nenhuma marcação no dia (ausência
+injustificada no sistema).
+
+Os Passos 3 a 5 só rodam se o usuário pedir o relatório completo (IMR/.docx); quando o pedido é
+só "análise da frequência", pare aqui.
 
 ### Passo 3 — Reunir os dados que só o fiscal sabe
 Pergunte ao usuário (ou use o que ele já mandou na conversa) pra preencher um JSON no formato de
@@ -104,6 +141,7 @@ pdftoppm -jpeg -r 100 relatorio_fiscalizacao_MM_AAAA.pdf page
 Leia as imagens geradas antes de apresentar o arquivo ao usuário.
 
 ## Coisas que você NÃO deve fazer sozinho
+- Não inclua nas tabelas nem no total quem não está na Relação de Funcionários do mês.
 - Não decida sozinho o número final de faltas que entra no indicador 3 — é sempre revisão manual
   do usuário (ver Passo 2).
 - Não invente números de NCC/NMC/ME/MP, valores de OF/OS ou números SEI — pergunte, eles vêm de
@@ -114,7 +152,9 @@ Leia as imagens geradas antes de apresentar o arquivo ao usuário.
 
 ## Arquivos desta skill
 - `scripts/extract_ponto.py` — extrai a folha de ponto do PDF (por coordenadas de texto)
-- `scripts/calc_indicador3.py` — dias úteis, faltas/meias faltas, indicador DSC
+- `scripts/relacao.py` — lê a Relação de Funcionários e casa os nomes com o ponto
+- `scripts/calc_indicador3.py` — dias úteis, faltas/meias faltas, indicador DSC (só quem está na relação)
+- `scripts/gerar_tabelas_frequencia.py` — as duas tabelas da análise de frequência (TAB, pra colar no Excel)
 - `scripts/calc_relatorio.py` — consolida os 3 indicadores, VDT, valor final
 - `scripts/gerar_docx.js` — gera o `.docx` final no layout do modelo SEI
 - `references/feriados_belem.json` — calendário de feriados (atualizar todo ano)

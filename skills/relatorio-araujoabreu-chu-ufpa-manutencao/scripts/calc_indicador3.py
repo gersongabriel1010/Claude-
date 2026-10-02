@@ -17,6 +17,11 @@ Regras de negócio (confirmadas com o usuário):
   - Meia falta (0,5): 00:00 < horas_normais < 06:00 num dia útil, qualquer que seja o motivo.
   - Sábado/Domingo e feriados nunca contam, mesmo que o motivo diga algo diferente.
 
+Com --relacao (planilha "Relação de Funcionários" do mês), só os funcionários da relação entram
+no total/DSC; quem está no ponto mas fora da relação vai pra `fora_da_relacao` (só informativo).
+Dias anteriores à admissão não contam; dias posteriores ao desligamento contam e são marcados
+como "pós-desligamento" (vaga sem substituto).
+
 O total de faltas calculado aqui é uma SUGESTÃO para revisão manual — o fiscal decide o
 número final que entra na fórmula do indicador (ver campo "faltas_sugeridas" vs. o que for
 efetivamente usado).
@@ -24,7 +29,7 @@ efetivamente usado).
 Uso:
     python3 calc_indicador3.py <ponto_extraido.json> --mes 7 --ano 2026 \
         [--feriados feriados_belem.json] [--horas-dia 8.8] [--qtd-funcionarios 27] \
-        [--employee-list lista_funcionarios.json] [--out indicador3.json]
+        [--relacao relacao_funcionarios.xlsx] [--out indicador3.json]
 """
 import argparse
 import json
@@ -32,6 +37,8 @@ import re
 import sys
 from datetime import date, timedelta
 from pathlib import Path
+
+from relacao import carrega_relacao, casa_relacao_com_ponto
 
 DIA_SEMANA_UTIL = {"Seg", "Ter", "Qua", "Qui", "Sex"}
 
@@ -118,6 +125,9 @@ def main():
     ap.add_argument("--incluir-pontos-facultativos", action="store_true")
     ap.add_argument("--employee-list", default=None,
                      help="JSON com lista de nomes esperados (['NOME1','NOME2',...]) pra conferência")
+    ap.add_argument("--relacao", default=None,
+                     help="Planilha (.xlsx/.csv) com a Relação de Funcionários do mês. Recomendado: "
+                          "só quem está nela entra no total de faltas/DSC.")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
@@ -131,39 +141,79 @@ def main():
 
     ponto = json.loads(Path(args.ponto_json).read_text(encoding="utf-8"))
 
-    resultado_funcionarios = []
-    total_faltas_geral = 0.0
+    registros_ponto = {f["colaborador"]: f for f in ponto["funcionarios"]}
 
-    for f in ponto["funcionarios"]:
-        faltas_lista = []
-        total_faltas_func = 0.0
-        for dia in f["dias"]:
+    def apura(dias, admissao=None, demissao=None):
+        faltas_lista, total = [], 0.0
+        for dia in dias:
+            d_iso = data_br_para_iso(dia["data"])
+            if admissao and d_iso < admissao.isoformat():
+                continue  # antes da admissão não é falta
             tipo, motivo = classifica_dia(dia, dias_uteis_set)
-            if tipo == "cheia":
-                total_faltas_func += 1.0
-                faltas_lista.append({"data": dia["data"], "dia_semana": dia["dia_semana"],
-                                      "tipo": "falta cheia (1,0)", "motivo": motivo})
-            elif tipo == "meia":
-                total_faltas_func += 0.5
-                faltas_lista.append({"data": dia["data"], "dia_semana": dia["dia_semana"],
-                                      "tipo": "meia falta (0,5)", "motivo": motivo})
-        resultado_funcionarios.append({
-            "colaborador": f["colaborador"],
-            "dias_registrados_no_ponto": len(f["dias"]),
-            "total_faltas": round(total_faltas_func, 1),
-            "faltas": faltas_lista,
-        })
-        total_faltas_geral += total_faltas_func
+            if tipo is None:
+                continue
+            pos_deslig = bool(demissao and d_iso > demissao.isoformat())
+            if pos_deslig and motivo == "(sem motivo registrado no ponto)":
+                motivo = "sem motivo (pós-desligamento)"
+            sem_marcacao = not any(dia.get(k) for k in ("1a_entrada", "1a_saida", "2a_entrada", "2a_saida"))
+            valor = 1.0 if tipo == "cheia" else 0.5
+            total += valor
+            faltas_lista.append({"data": dia["data"], "dia_semana": dia["dia_semana"],
+                                  "tipo": "falta cheia (1,0)" if tipo == "cheia" else "meia falta (0,5)",
+                                  "valor": valor, "motivo": motivo,
+                                  "sem_marcacao": sem_marcacao, "pos_desligamento": pos_deslig})
+        return round(total, 1), faltas_lista
 
-    # checagem contra lista de funcionários esperada, se fornecida
+    resultado_funcionarios = []
+    fora_da_relacao = None
     checagem_lista = None
-    if args.employee_list:
-        esperados = set(json.loads(Path(args.employee_list).read_text(encoding="utf-8")))
-        encontrados = {f["colaborador"] for f in ponto["funcionarios"]}
+
+    if args.relacao:
+        relacao, nomes_fora = casa_relacao_com_ponto(carrega_relacao(args.relacao), list(registros_ponto))
+        for f in relacao:
+            reg = registros_ponto.get(f["nome_no_ponto"])
+            total_f, faltas_f = apura(reg["dias"], f["admissao"], f["demissao"]) if reg else (None, [])
+            resultado_funcionarios.append({
+                "colaborador": f["nome"],
+                "nome_no_ponto": f["nome_no_ponto"],
+                "consta_no_ponto": reg is not None,
+                "funcao": f["funcao"],
+                "observacao_relacao": f["observacao"],
+                "aditivo": f["aditivo"],
+                "cobre_faltas": f["cobre_faltas"],
+                "registrado_como": f["registrado_como"],
+                "admissao": f["admissao"].isoformat() if f["admissao"] else None,
+                "demissao": f["demissao"].isoformat() if f["demissao"] else None,
+                "dias_registrados_no_ponto": len(reg["dias"]) if reg else 0,
+                "total_faltas": total_f,
+                "faltas": faltas_f,
+            })
+        fora_da_relacao = []
+        for n in nomes_fora:
+            total_f, _ = apura(registros_ponto[n]["dias"])
+            fora_da_relacao.append({"colaborador": n, "total_faltas_no_ponto": total_f})
         checagem_lista = {
-            "esperados_nao_encontrados_no_ponto": sorted(esperados - encontrados),
-            "encontrados_no_ponto_nao_esperados": sorted(encontrados - esperados),
+            "na_relacao_sem_ponto": [f["colaborador"] for f in resultado_funcionarios if not f["consta_no_ponto"]],
+            "no_ponto_fora_da_relacao": nomes_fora,
         }
+    else:
+        for f in ponto["funcionarios"]:
+            total_f, faltas_f = apura(f["dias"])
+            resultado_funcionarios.append({
+                "colaborador": f["colaborador"],
+                "dias_registrados_no_ponto": len(f["dias"]),
+                "total_faltas": total_f,
+                "faltas": faltas_f,
+            })
+        if args.employee_list:
+            esperados = set(json.loads(Path(args.employee_list).read_text(encoding="utf-8")))
+            encontrados = set(registros_ponto)
+            checagem_lista = {
+                "esperados_nao_encontrados_no_ponto": sorted(esperados - encontrados),
+                "encontrados_no_ponto_nao_esperados": sorted(encontrados - esperados),
+            }
+
+    total_faltas_geral = sum(f["total_faltas"] or 0 for f in resultado_funcionarios)
 
     horas_dia = args.horas_dia
     qtd_func = args.qtd_funcionarios
@@ -186,7 +236,11 @@ def main():
                            "Revise a lista de faltas abaixo, ajuste manualmente o total de faltas "
                            "considerado válido, e recalcule HT/DSC com o número final."
         },
+        "mes": args.mes,
+        "ano": args.ano,
+        "filtrado_pela_relacao": bool(args.relacao),
         "checagem_lista_funcionarios": checagem_lista,
+        "fora_da_relacao": fora_da_relacao,
         "funcionarios": resultado_funcionarios,
     }
 
