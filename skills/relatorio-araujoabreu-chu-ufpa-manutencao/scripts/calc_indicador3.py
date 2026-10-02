@@ -114,6 +114,103 @@ def classifica_dia(dia_registro, dias_uteis_set):
     return None, None
 
 
+def tem_marcacao(dia):
+    return any(dia.get(k) for k in ("1a_entrada", "1a_saida", "2a_entrada", "2a_saida"))
+
+
+def iso_para_br(iso):
+    return f"{iso[8:10]}/{iso[5:7]}"
+
+
+def faixa(isos):
+    return iso_para_br(isos[0]) if len(isos) == 1 else f"{iso_para_br(isos[0])} a {iso_para_br(isos[-1])}"
+
+
+def apura_funcionario(dias, dias_uteis, admissao=None, demissao=None):
+    """Faltas de um funcionário no mês + conferência das datas da relação contra o ponto.
+
+    Nada é descartado em silêncio:
+      - dias úteis antes da admissão não contam, mas voltam em `dias_antes_admissao`;
+      - dia útil que nem aparece na folha de ponto conta como falta ("dia ausente da folha");
+      - dias depois do desligamento contam (marcados `pos_desligamento`);
+      - divergências entre as datas da relação e o ponto voltam em `alertas`.
+    """
+    adm = admissao.isoformat() if admissao else None
+    dem = demissao.isoformat() if demissao else None
+    por_data = {data_br_para_iso(d["data"]): d for d in dias}
+    uteis_set = set(dias_uteis)
+    faltas, total, antes_adm, alertas = [], 0.0, [], []
+
+    for d_iso in dias_uteis:
+        dia = por_data.get(d_iso)
+        if adm and d_iso < adm:
+            antes_adm.append(d_iso)
+            continue
+        pos = bool(dem and d_iso > dem)
+        if dia is None:
+            tipo, motivo, sem_marc = "cheia", "dia ausente da folha de ponto", True
+        else:
+            tipo, motivo = classifica_dia(dia, uteis_set)
+            sem_marc = not tem_marcacao(dia)
+            if tipo is None:
+                continue
+        if pos and motivo == "(sem motivo registrado no ponto)":
+            motivo = "sem motivo (pós-desligamento)"
+        valor = 1.0 if tipo == "cheia" else 0.5
+        total += valor
+        faltas.append({"data": f"{d_iso[8:10]}/{d_iso[5:7]}/{d_iso[0:4]}",
+                       "dia_semana": dia["dia_semana"] if dia else "",
+                       "tipo": "falta cheia (1,0)" if tipo == "cheia" else "meia falta (0,5)",
+                       "valor": valor, "motivo": motivo, "sem_marcacao": sem_marc,
+                       "pos_desligamento": pos, "ausente_da_folha": dia is None})
+
+    # --- conferência das datas da relação contra o ponto ---
+    ausentes = [data_br_para_iso(f["data"]) for f in faltas if f["ausente_da_folha"] and not f["pos_desligamento"]]
+    if ausentes:
+        alertas.append(f"{len(ausentes)} dia(s) útil(eis) não aparecem na folha de ponto "
+                       f"({', '.join(iso_para_br(x) for x in ausentes)}) — contados como falta; conferir")
+    if adm:
+        marc_antes = sorted(x for x, d in por_data.items() if x < adm and tem_marcacao(d))
+        if marc_antes:
+            alertas.append(f"há marcação de ponto antes da admissão informada na relação "
+                           f"({data_br(adm)}): {', '.join(iso_para_br(x) for x in marc_antes)} — "
+                           f"data de admissão provavelmente errada")
+        if antes_adm and not marc_antes:
+            alertas.append(f"{len(antes_adm)} dia(s) útil(eis) antes da admissão ({data_br(adm)}) "
+                           f"não contados: {faixa(antes_adm)} — confirmar a data de admissão")
+        if adm >= dias_uteis[0]:
+            vazios = []
+            for x in (u for u in dias_uteis if u >= adm):
+                if por_data.get(x) and tem_marcacao(por_data[x]):
+                    break
+                vazios.append(x)
+            if vazios and len(vazios) < len([u for u in dias_uteis if u >= adm]):
+                alertas.append(f"sem marcação de {faixa(vazios)}, logo após a admissão ({data_br(adm)}) — "
+                               f"contados como falta; confirmar a data de admissão")
+    if dem:
+        marc_depois = sorted(x for x, d in por_data.items() if x > dem and tem_marcacao(d))
+        if marc_depois:
+            alertas.append(f"há marcação de ponto depois do desligamento informado na relação "
+                           f"({data_br(dem)}): {', '.join(iso_para_br(x) for x in marc_depois)} — "
+                           f"data de desligamento provavelmente errada")
+    else:
+        cauda = []
+        for x in reversed(dias_uteis):
+            d = por_data.get(x)
+            if d is None or (not tem_marcacao(d) and not (d.get("motivo") or "").strip()):
+                cauda.insert(0, x)
+            else:
+                break
+        if len(cauda) >= 3:
+            alertas.append(f"sem marcação e sem motivo de {faixa(cauda)} (até o fim do mês) e sem data de "
+                           f"demissão na relação — possível desligamento não informado")
+    return {"total": round(total, 1), "faltas": faltas, "dias_antes_admissao": antes_adm, "alertas": alertas}
+
+
+def data_br(iso):
+    return f"{iso[8:10]}/{iso[5:7]}/{iso[0:4]}"
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("ponto_json")
@@ -144,25 +241,8 @@ def main():
     registros_ponto = {f["colaborador"]: f for f in ponto["funcionarios"]}
 
     def apura(dias, admissao=None, demissao=None):
-        faltas_lista, total = [], 0.0
-        for dia in dias:
-            d_iso = data_br_para_iso(dia["data"])
-            if admissao and d_iso < admissao.isoformat():
-                continue  # antes da admissão não é falta
-            tipo, motivo = classifica_dia(dia, dias_uteis_set)
-            if tipo is None:
-                continue
-            pos_deslig = bool(demissao and d_iso > demissao.isoformat())
-            if pos_deslig and motivo == "(sem motivo registrado no ponto)":
-                motivo = "sem motivo (pós-desligamento)"
-            sem_marcacao = not any(dia.get(k) for k in ("1a_entrada", "1a_saida", "2a_entrada", "2a_saida"))
-            valor = 1.0 if tipo == "cheia" else 0.5
-            total += valor
-            faltas_lista.append({"data": dia["data"], "dia_semana": dia["dia_semana"],
-                                  "tipo": "falta cheia (1,0)" if tipo == "cheia" else "meia falta (0,5)",
-                                  "valor": valor, "motivo": motivo,
-                                  "sem_marcacao": sem_marcacao, "pos_desligamento": pos_deslig})
-        return round(total, 1), faltas_lista
+        r = apura_funcionario(dias, dias_uteis, admissao, demissao)
+        return r["total"], r["faltas"], r["dias_antes_admissao"], r["alertas"]
 
     resultado_funcionarios = []
     fora_da_relacao = None
@@ -172,7 +252,8 @@ def main():
         relacao, nomes_fora = casa_relacao_com_ponto(carrega_relacao(args.relacao), list(registros_ponto))
         for f in relacao:
             reg = registros_ponto.get(f["nome_no_ponto"])
-            total_f, faltas_f = apura(reg["dias"], f["admissao"], f["demissao"]) if reg else (None, [])
+            total_f, faltas_f, antes_adm, alertas_f = (apura(reg["dias"], f["admissao"], f["demissao"])
+                                                       if reg else (None, [], [], []))
             resultado_funcionarios.append({
                 "colaborador": f["nome"],
                 "nome_no_ponto": f["nome_no_ponto"],
@@ -187,18 +268,22 @@ def main():
                 "dias_registrados_no_ponto": len(reg["dias"]) if reg else 0,
                 "total_faltas": total_f,
                 "faltas": faltas_f,
+                "dias_antes_admissao": antes_adm,
+                "alertas": alertas_f,
             })
         fora_da_relacao = []
         for n in nomes_fora:
-            total_f, _ = apura(registros_ponto[n]["dias"])
+            total_f, *_ = apura(registros_ponto[n]["dias"])
             fora_da_relacao.append({"colaborador": n, "total_faltas_no_ponto": total_f})
+        pendencias = [f"{f['colaborador']}: {a}" for f in resultado_funcionarios for a in f["alertas"]]
         checagem_lista = {
+            "pendencias_datas": pendencias,
             "na_relacao_sem_ponto": [f["colaborador"] for f in resultado_funcionarios if not f["consta_no_ponto"]],
             "no_ponto_fora_da_relacao": nomes_fora,
         }
     else:
         for f in ponto["funcionarios"]:
-            total_f, faltas_f = apura(f["dias"])
+            total_f, faltas_f, _, _ = apura(f["dias"])
             resultado_funcionarios.append({
                 "colaborador": f["colaborador"],
                 "dias_registrados_no_ponto": len(f["dias"]),

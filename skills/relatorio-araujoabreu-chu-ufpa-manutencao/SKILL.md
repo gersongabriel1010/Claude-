@@ -62,8 +62,16 @@ Regras de negócio já embutidas (confirmadas com o usuário, não pergunte de n
 - Observação da relação: "Aditivo" = posto do Termo Aditivo; "Aditivo (Fulano)" = o ponto do
   posto está registrado sob o nome "Fulano" (usa as faltas do Fulano); "Cobrir faltas" = função
   de cobertura.
-- Dias antes da admissão não contam; dias depois do desligamento contam e saem marcados como
-  "sem motivo (pós-desligamento)".
+- **Nada é descartado em silêncio** — as datas da relação são conferidas contra o ponto:
+  - dias úteis antes da admissão não contam, mas aparecem na Observação/Detalhe ("01/09 a 12/09
+    antes da admissão – não contados") e viram pendência pra confirmar a data;
+  - dias depois do desligamento **contam como falta** (confirmado com o usuário) e saem como
+    "sem substituto após desligamento (N dias)";
+  - dia útil que nem aparece na folha de ponto conta como falta ("dia ausente da folha de ponto
+    (verificar)");
+  - viram pendência: marcação antes da admissão ou depois da demissão informadas (data da relação
+    provavelmente errada), dias sem marcação logo após a admissão, e 3+ dias úteis sem marcação e
+    sem motivo até o fim do mês sem data de demissão (possível desligamento não informado).
 
 ### Passo 2b — Entregar a análise de frequência (as duas tabelas)
 ```bash
@@ -83,9 +91,11 @@ ele peça.
    SUBTOTAL por função e a linha TOTAL.
 
 Férias contam como falta (regra do contrato — confirmado com o usuário). Depois das tabelas,
-liste em poucas linhas: o total de faltas, o DSC sugerido (do `indicador3.json`), quem está na
-relação e não consta no ponto, e quem está no ponto fora da relação (com as faltas que teria —
-só informativo). Isso sai do `stderr` do script.
+liste em poucas linhas (tudo sai do `stderr` do script): o total de faltas, o DSC sugerido (do
+`indicador3.json`), **as pendências relação x ponto** (nunca omita — são datas de
+admissão/desligamento a confirmar), quem está na relação e não consta no ponto, e quem está no
+ponto fora da relação (com as faltas que teria — só informativo). Linhas com pendência saem
+marcadas nas tabelas com "conferir: divergência entre relação e ponto".
 
 **O total de faltas é uma SUGESTÃO.** O usuário decide o número que efetivamente entra na fórmula
 do DSC (pode reduzir por compensação, erro de ponto etc.). Não siga pro relatório final sem essa

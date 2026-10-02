@@ -39,7 +39,6 @@ MOTIVOS = [
     ("DECLARACAO DE COMPARECIMENTO", "declaração de comparecimento"),
     ("LICENCA", "licença"),
     ("ADESAO", "abono Adesão do Pará"),
-    ("POS-DESLIGAMENTO", "sem motivo (pós-desligamento)"),
 ]
 
 PLURAIS = {"Mecânico": "mecânicos", "Ajudante": "ajudantes", "Auxiliar": "auxiliares",
@@ -65,7 +64,14 @@ def lista_pt(itens):
     return itens[0] if len(itens) == 1 else ", ".join(itens[:-1]) + " e " + itens[-1]
 
 
+POS_DESLIG = "sem substituto após desligamento"
+
+
 def rotulo_motivo(falta):
+    if falta.get("pos_desligamento"):
+        return POS_DESLIG
+    if falta.get("ausente_da_folha"):
+        return "dia ausente da folha de ponto (verificar)"
     m = falta["motivo"]
     if m == "(sem motivo registrado no ponto)":
         if falta.get("sem_marcacao"):
@@ -122,8 +128,16 @@ def agrupa(faltas, dias_uteis, ano):
             for b in blocos:
                 partes.extend([f"{b[0]} a {b[-1]}"] if len(b) >= 3 else b)
             texto = lista_pt(partes)
+        if rotulo == POS_DESLIG:
+            extra = f"{len(datas)} {'dia' if len(datas) == 1 else 'dias'}"
         saida.append((rotulo, extra, texto, meia))
     return saida
+
+
+def faixa_br(isos):
+    if len(isos) == 1:
+        return data_br(isos[0])[:5]
+    return f"{data_br(isos[0])[:5]} a {data_br(isos[-1])[:5]}"
 
 
 def texto_faltas(total):
@@ -152,8 +166,11 @@ def montar(ind3):
         if f.get("cobre_faltas"):
             plural = PLURAIS.get(f["funcao"].split()[0], "colaboradores")
             obs.append(f"Função: cobrir faltas de outros {plural}")
+        antes_adm = f.get("dias_antes_admissao") or []
         if admitido_no_mes:
-            obs.append(f"Admitido em {data_br(f['admissao'])} (ponto só a partir dessa data)")
+            obs.append(f"Admitido em {data_br(f['admissao'])}" + (
+                f"; {faixa_br(antes_adm)} antes da admissão – não contados" if antes_adm
+                else " (ponto só a partir dessa data)"))
         if desligado:
             obs.append(f"Desligado em {data_br(f['demissao'])}")
         if not f["consta_no_ponto"]:
@@ -168,15 +185,17 @@ def montar(ind3):
                 det = "; ".join(f"{datas} {rot}" + (f" ({extra})" if extra else "")
                                 for rot, extra, datas, _ in grupos)
             obs.append(f"{texto_faltas(total)} ({det})")
-        elif obs:
+        elif obs and not f.get("alertas"):
             obs.append("sem intercorrências")
+        if f.get("alertas"):
+            obs.append("conferir: divergência entre relação e ponto (ver pendências)")
         observacao = "; ".join(obs) if obs else "Sem intercorrências"
         nome = f["colaborador"] + (f" ({f['registrado_como']})" if f.get("registrado_como") else "")
         linhas_analise.append((nome, f["funcao"], observacao))
 
         # ---------- Tabela 2: Relatório de faltas ----------
         entra = (not f["consta_no_ponto"]) or (total or 0) > 0 or f.get("aditivo") \
-            or f.get("cobre_faltas") or desligado
+            or f.get("cobre_faltas") or desligado or antes_adm or f.get("alertas")
         if entra:
             det = []
             if f.get("cobre_faltas"):
@@ -184,10 +203,13 @@ def montar(ind3):
             if desligado:
                 det.append(f"desligado em {data_br(f['demissao'])}")
             if admitido_no_mes:
-                det.append(f"admitido em {data_br(f['admissao'])}")
+                det.append(f"admitido em {data_br(f['admissao'])}" + (
+                    f"; {faixa_br(antes_adm)} antes da admissão – não contados" if antes_adm else ""))
             if not f["consta_no_ponto"]:
                 det.append(f"não consta na folha de ponto de {nome_mes.lower()} – verificar")
             det.extend(f"{datas} {rot}" + (f" ({extra})" if extra else "") for rot, extra, datas, _ in grupos)
+            if f.get("alertas"):
+                det.append("conferir: divergência entre relação e ponto")
             linhas_faltas.append((nome, f["funcao"], total, "; ".join(det)))
 
     linhas_analise.sort(key=lambda l: sem_acento(l[0]))
@@ -234,6 +256,10 @@ def main():
 
     chk = ind3.get("checagem_lista_funcionarios") or {}
     print(f"\nTotal de faltas (só relação): {num(total, 2)}", file=sys.stderr)
+    if chk.get("pendencias_datas"):
+        print("Pendências (relação x ponto) — confirmar com o usuário:", file=sys.stderr)
+        for pend in chk["pendencias_datas"]:
+            print(f"  - {pend}", file=sys.stderr)
     if chk.get("na_relacao_sem_ponto"):
         print("Na relação mas sem ponto: " + ", ".join(chk["na_relacao_sem_ponto"]), file=sys.stderr)
     if ind3.get("fora_da_relacao"):
