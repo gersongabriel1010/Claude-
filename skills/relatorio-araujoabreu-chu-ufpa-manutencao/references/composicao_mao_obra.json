@@ -1,0 +1,16 @@
+{
+  "_observacao": "Tabela atualizada da composição dos valores do contrato. Atualize sempre que houver Termo Aditivo com reajuste de valores ou de quantitativo de postos.",
+  "contrato": "05/2023",
+  "contratada": "EMPRESA ARAÚJO ABREU ENGENHARIA NORTE LTDA",
+  "vigencia_valores": "julho/2026 (ajustar conforme Termo Aditivo mais recente)",
+  "horas_trabalho_dia": 8.8,
+  "quantidade_funcionarios_dsc": 27,
+  "valor_mensal_mao_obra": 196536.68,
+  "postos": [
+    { "item": 1, "cbo": "9101-05", "cargo": "Encarregado de Manutenção", "quantidade": 1, "valor_unitario": 9276.25, "valor_total": 9276.25 },
+    { "item": 2, "cbo": "9112-05", "cargo": "Auxiliar de Refrigeração", "quantidade": 12, "valor_unitario": 5716.70, "valor_total": 68600.34 },
+    { "item": 3, "cbo": "7257-05", "cargo": "Técnico em Refrigeração", "quantidade": 11, "valor_unitario": 8640.40, "valor_total": 95044.39 },
+    { "item": 4, "cbo": "5143-25", "cargo": "Oficial de Manutenção", "quantidade": 2, "valor_unitario": 8640.40, "valor_total": 17280.80 },
+    { "item": 5, "cbo": "4141-05", "cargo": "Almoxarife", "quantidade": 1, "valor_unitario": 6334.89, "valor_total": 6334.89 }
+  ]
+}

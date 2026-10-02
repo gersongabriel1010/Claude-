@@ -1,0 +1,29 @@
+{
+  "identificacao": {
+    "mes": 7, "ano": 2026, "contrato": "05/2023",
+    "contratada": "EMPRESA ARAÚJO ABREU ENGENHARIA NORTE LTDA",
+    "numero_relatorio_sei": "343/2026/SIF/DLI/GA/CHU-UFPA-HU BRASIL",
+    "processo_sei": "23768.004335/2023-25",
+    "anexos_sei": ["63794433 (MC CORRETIVA)", "63569469, 63569531, 63578918, 63578991, 63581375, 63581416, 63581454 (preventivas)", "63794546 (folhas de ponto)"]
+  },
+  "indicador1": { "ncc_chamados_corretivos_totais": 264, "nmc_manutencoes_corretivas_realizadas": 255 },
+  "indicador2": { "mp_servicos_planejados": 805, "me_servicos_executados": 751 },
+  "indicador3": {
+    "horas_trabalho_dia": 8.8, "quantidade_funcionarios": 24,
+    "dias_uteis_no_mes": 23, "total_faltas_final_revisado": 11
+  },
+  "mao_de_obra": {
+    "valor_mensal_base": 196536.68,
+    "descontos_vaga_nao_substituida": []
+  },
+  "of_os": [
+    {"numero": "OF 168", "valor": 28558.25},
+    {"numero": "OF 173", "valor": 1279.69},
+    {"numero": "OF 174", "valor": 38095.32},
+    {"numero": "OF 175", "valor": 13170.42},
+    {"numero": "OF 178", "valor": 13438.17},
+    {"numero": "OS 42 (50%)", "valor": 29407.19},
+    {"numero": "OS 43", "valor": 26536.64},
+    {"numero": "OS 44", "valor": 11609.78}
+  ]
+}

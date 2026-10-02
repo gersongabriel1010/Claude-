@@ -1,0 +1,32 @@
+{
+  "_observacao": "Calendário compilado em 31/08/2026 a partir de fontes públicas (Portaria de feriados/pontos facultativos do Ministério da Gestão para 2026, calendário de feriados municipais/estaduais de Belém-PA). CONFIRME com o RH/administração do CHU-UFPA antes de usar em produção, especialmente a coluna 'ponto_facultativo' — a EBSERH decide internamente se esses dias contam como não-úteis para fins de fiscalização. Atualize este arquivo a cada novo ano.",
+  "2026": {
+    "feriados_nacionais": [
+      { "data": "2026-01-01", "nome": "Confraternização Universal" },
+      { "data": "2026-04-03", "nome": "Sexta-feira Santa (Paixão de Cristo)" },
+      { "data": "2026-04-21", "nome": "Tiradentes" },
+      { "data": "2026-05-01", "nome": "Dia do Trabalho" },
+      { "data": "2026-09-07", "nome": "Independência do Brasil" },
+      { "data": "2026-10-12", "nome": "Nossa Senhora Aparecida" },
+      { "data": "2026-11-02", "nome": "Finados" },
+      { "data": "2026-11-15", "nome": "Proclamação da República (cai num domingo em 2026, sem efeito nos dias úteis)" },
+      { "data": "2026-11-20", "nome": "Dia Nacional de Zumbi e da Consciência Negra" },
+      { "data": "2026-12-25", "nome": "Natal" }
+    ],
+    "pontos_facultativos_federais": [
+      { "data": "2026-02-16", "nome": "Carnaval (segunda-feira)" },
+      { "data": "2026-02-17", "nome": "Carnaval (terça-feira)" },
+      { "data": "2026-02-18", "nome": "Quarta-feira de Cinzas (facultativo até 14h)" },
+      { "data": "2026-06-04", "nome": "Corpus Christi" }
+    ],
+    "feriados_estaduais_pa": [
+      { "data": "2026-08-15", "nome": "Adesão do Pará à Independência (cai num sábado em 2026, sem efeito nos dias úteis)" },
+      { "data": "2026-12-08", "nome": "Nossa Senhora da Conceição" }
+    ],
+    "feriados_municipais_belem": [
+      { "data": "2026-01-12", "nome": "Aniversário de Belém (fundação em 1616)" },
+      { "data": "2026-10-26", "nome": "Recírio (segunda-feira seguinte ao Círio de Nazaré)" },
+      { "data": "2026-12-08", "nome": "Nossa Senhora da Conceição (também estadual)" }
+    ]
+  }
+}
