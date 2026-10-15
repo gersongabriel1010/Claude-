@@ -1,7 +1,7 @@
 # HANDOFF: parecer técnico dos itens de engenharia mecânica
 **Obra:** Requalificação e ampliação da ETE do Hospital Barros Barreto (Belém/PA) · **Orçamentista:** Sanigy Engenharia Sanitária · **Data-base:** 06/2025
 **Arquivo gerado em:** 15/10/2026 · **Origem:** conversa anterior com Claude, resumida para ser retomada em outra conversa.
-**Versão 2 (15/10/2026, sessão 2):** acrescenta a **seção 15** (guindaste, registros SEDOP, incêndio, comissionamento e lacunas de escopo, conferidos contra o SINAPI-PA 06/2025) e atualiza as seções 10 e 11. Nas seções 1 a 9 e 12 a 14 só foi acrescentada uma nota no bloco B da seção 8 (guindaste). **Na sessão 2 a planilha do orçamento não foi anexada:** os valores do orçado usados na seção 15 vêm das seções 5 a 10.
+**Versão 2 (15/10/2026, sessão 2):** acrescenta a **seção 15** (guindaste, registros SEDOP, incêndio, comissionamento e lacunas de escopo, conferidos contra o SINAPI-PA 06/2025) e a **seção 16** (comparação item a item com o SINAPI-PA 09/2026), e atualiza as seções 5, 10, 11 e 12. Nas seções 1 a 9 e 12 a 14 só foi acrescentada uma nota no bloco B da seção 8 (guindaste). **Na sessão 2 a planilha do orçamento não foi anexada:** os valores do orçado usados na seção 15 vêm das seções 5 a 10.
 
 ---
 
@@ -135,7 +135,7 @@ Foram cruzados os 149 itens SINAPI da planilha com a tabela da data-base.
 - **8.3.2:** o orçado fica em R$ 145/m, enquanto os SINAPI equivalentes de 4" custam R$ 194 a R$ 209/m (valor irrelevante, 1 vara).
 - **Encargos:** SINAPI-PA 06/2025 desonerado: horista **95,00%** e mensalista **53,45%**. A aba "Compos. Enc. Sociais" mostra 89,42% e 49,63%, "fonte SINAPI-Pará". Os preços da planilha seguem a tabela; a aba é que está inconsistente. *Hipótese:* os 95,00% incluem o INSS de 5% da transição de 2025.
 - **Itens fora do escopo, para o fiscal responsável:** 2.3 e 2.5 estão R$ 1.178,16/mês acima da tabela (cerca de R$ 21 mil c/ BDI em 7 meses); 26 composições (elétrica, lógica e SPDA) sem custo oficial (R$ 23.596,79), das quais 4 códigos foram **criados em 07/2025**, depois da data-base (106024, 106025, 106027, 106031).
-- **Referência de inflação:** SINAPI-PA 09/2026 está de +0,5% a +14% acima de 06/2025 nos itens mecânicos (válvulas de bronze cerca de +14%, conexões galvanizadas cerca de +11,5%). Compatível com o índice do período (IBGE: 6,81% em 12 meses até 09/2026).
+- **Referência de inflação (refeita na sessão 2, seção 16):** nos 36 itens SINAPI do escopo mecânico, o SINAPI-PA 09/2026 vai de **−19,8% a +22,1%** por item em relação a 06/2025; no conjunto, **+6,46%**. Válvulas de bronze ≈ +14%, conexões galvanizadas ≈ +11,5%, PVC de 60 a 110 mm +4% a +6%; tubos e joelhos de 20 e 25 mm e a placa 13.2 **caíram**. Para comparação, o IBGE dá 6,81% em 12 meses até 09/2026.
 
 ---
 
@@ -412,6 +412,7 @@ H1 temperatura do ar × limite do PVC · H2 tubo DN 80 × conexões 2½" · H3 p
 3. **Curva ABC:** a primeira versão separava decantador e frete, guindaste CHP e CHI, e registros DN 60 de mesmo código. A versão desta seção agrupa o mesmo objeto de custo. Total e Δ BDI não mudaram.
 4. **Itens 8.2 que eu chamava de "preço não verificável":** passaram a **OK** depois que a tabela SINAPI 06/2025 foi recebida.
 5. **Grupo 12:** tem **20 linhas** (12.1.1 a 12.1.7, 12.2.1 a 12.2.5, 12.3.1 a 12.3.6, 12.4.1 e 12.4.2).
+6. **Inflação 06/2025 → 09/2026 (sessão 2):** a faixa "+0,5% a +14%" da sessão 1 estava incompleta. Item a item vai de −19,8% (tubo DN 20) a +22,1% (bucha 50 × 25, item 8.2.25); vários itens de PVC de pequeno diâmetro caíram depois da revisão de composições de 09/2026.
 
 ---
 
@@ -527,3 +528,92 @@ Lista do que um sistema UASB + FBAS aerado + decantador + tanque de contato norm
 | 10.10 | NÃO VERIFICÁVEL | NÃO VERIFICÁVEL, **indício de acima** (3,94× SINAPI 94501) | 15.2 |
 | 13.1 | NÃO VERIFICÁVEL | OK com ressalva | 15.3 |
 | 13.4 | NÃO OK só por BDI | sem mudança; preço confirmado abaixo da referência BC | 15.3 |
+
+---
+
+## 16. Sessão 2: comparação com o SINAPI-PA 09/2026 (pergunta 3: "está muito abaixo hoje?")
+
+**Arquivos:** `SINAPI_Referência_2026_09.xlsx` (emissão 09/10/2026), `SINAPI_Manutenções_2026_09.xlsx` e os demais de 09/2026, recebidos na sessão 2. Mesmo método: PA, desonerado, BDI e TRUNC da planilha.
+**Encargos PA desonerados 09/2026:** horista **103,26%** e mensalista **59,98%** (em 06/2025: 95,00% e 53,45%). *Hipótese:* a alta acompanha a reoneração gradual da folha prevista na Lei 14.973/2024 (INSS de 5% em 2025 para 10% em 2026).
+**Como os códigos foram identificados:** a planilha não estava disponível; o código SINAPI de cada item foi obtido casando o preço unitário c/ BDI (seção 9) com TRUNC(custo 06/2025 × 1,2741) e conferindo a descrição. Os 36 itens casaram com **um único código** de descrição compatível. Confirmar na planilha quando ela for reanexada.
+
+### 16.1 Itens SINAPI do escopo mecânico (36 linhas, com o 10.11 junto do 10.13)
+
+| Item | Código | Descrição | Qtd | Custo 06/2025 | Custo 09/2026 | Variação | Total c/ BDI 06/2025 | Total c/ BDI 09/2026 | Diferença |
+|---|---|---|---|---|---|---|---|---|---|
+| 8.2.1 | 89401 | Tubo PVC DN 20 | 1 | 11,77 | 9,44 | −19,80% | 14,99 | 12,02 | −2,97 |
+| 8.2.2 | 89402 | Tubo PVC DN 25 | 34 | 13,50 | 11,93 | −11,63% | 584,80 | 516,80 | −68,00 |
+| 8.2.3 | 89450 | Tubo PVC DN 60 | 67 | 34,65 | 36,15 | +4,33% | 2.957,38 | 3.085,35 | +127,97 |
+| 8.2.4 | 89451 | Tubo PVC DN 75 | 53 | 56,55 | 59,02 | +4,37% | 3.818,65 | 3.985,07 | +166,42 |
+| 8.2.5 | 89452 | Tubo PVC DN 85 | 1 | 77,98 | 81,44 | +4,44% | 99,35 | 103,76 | +4,41 |
+| 8.2.6 | 94655 | Tubo PVC DN 110 | 39 | 140,85 | 148,67 | +5,55% | 6.998,55 | 7.387,38 | +388,83 |
+| 8.2.7 | 89404 | Joelho DN 20 | 1 | 7,55 | 6,69 | −11,39% | 9,61 | 8,52 | −1,09 |
+| 8.2.8 | 89408 | Joelho DN 25 | 13 | 9,00 | 9,29 | +3,22% | 148,98 | 153,79 | +4,81 |
+| 8.2.9 | 89505 | Joelho DN 60 | 34 | 46,96 | 48,75 | +3,81% | 2.034,22 | 2.111,74 | +77,52 |
+| 8.2.10 | 89513 | Joelho DN 75 | 24 | 119,63 | 124,66 | +4,20% | 3.658,08 | 3.811,68 | +153,60 |
+| 8.2.11 | 94686 | Joelho DN 110 | 11 | 291,42 | 307,03 | +5,36% | 4.084,19 | 4.302,98 | +218,79 |
+| 8.2.12 | 94671 | Luva DN 110 | 2 | 119,93 | 126,96 | +5,86% | 305,60 | 323,50 | +17,90 |
+| 8.2.13 | 89427 | Luva c/ bucha latão 25 × ¾" | 140 | 13,33 | 13,51 | +1,35% | 2.377,20 | 2.409,40 | +32,20 |
+| 8.2.14 | 94698 | Tê de redução 75 × 50 | 140 | 75,13 | 79,77 | +6,18% | 13.400,80 | 14.228,20 | +827,40 |
+| 8.2.15 | 94696 | Tê DN 60 | 7 | 56,50 | 60,06 | +6,30% | 503,86 | 535,64 | +31,78 |
+| 8.2.16 | 94697 | Tê DN 75 | 22 | 97,83 | 103,78 | +6,08% | 2.742,08 | 2.908,84 | +166,76 |
+| 8.2.17 | 94701 | Tê DN 110 | 3 | 257,97 | 272,69 | +5,71% | 986,01 | 1.042,29 | +56,28 |
+| 8.2.18 | 89428 | União DN 25 | 2 | 15,56 | 16,22 | +4,24% | 39,64 | 41,32 | +1,68 |
+| 8.2.20 | 89383 | Adaptador 25 × ¾" | 140 | 6,91 | 7,55 | +9,26% | 1.232,00 | 1.345,40 | +113,40 |
+| 8.2.21 | 89613 | Adaptador 75 × 2½" | 6 | 34,26 | 35,63 | +4,00% | 261,90 | 272,34 | +10,44 |
+| 8.2.22 | 89614 | Luva DN 85 | 2 | 67,87 | 70,73 | +4,21% | 172,94 | 180,22 | +7,28 |
+| 8.2.23 | 94715 | Adaptador c/ flanges 110 × 4" | 14 | 347,13 | 364,52 | +5,01% | 6.191,78 | 6.502,02 | +310,24 |
+| 8.2.25 | 103999 | Bucha de redução 50 × 25 | 140 | 13,47 | 16,45 | +22,12% | 2.402,40 | 2.933,00 | +530,60 |
+| 8.2.26 | 94687 | Curva 90° DN 110 | 4 | 263,01 | 277,28 | +5,43% | 1.340,40 | 1.413,12 | +72,72 |
+| 8.3.1 | 94464 | Tubo galvanizado DN 80 | 34 | 155,65 | 156,42 | +0,49% | 6.742,54 | 6.775,86 | +33,32 |
+| 8.3.4 | 94474 | Cotovelo 45° galv. 2½" | 4 | 134,62 | 150,14 | +11,53% | 686,04 | 765,16 | +79,12 |
+| 8.3.5 | 94473 | Cotovelo 90° galv. 2½" | 6 | 124,07 | 138,32 | +11,49% | 948,42 | 1.057,38 | +108,96 |
+| 8.3.6 | 94467 | Luva galv. 2½" | 4 | 86,66 | 96,65 | +11,53% | 441,64 | 492,56 | +50,92 |
+| 8.3.7 | 94468 | Niple galv. 2½" | 20 | 75,88 | 84,58 | +11,47% | 1.933,40 | 2.155,20 | +221,80 |
+| 8.3.9 | 92890 | União galv. 2½" | 10 | 213,45 | 239,04 | +11,99% | 2.719,50 | 3.045,60 | +326,10 |
+| 10.11+10.13 | 94493 | Registro de esfera DN 60 | 21 | 105,24 | 110,23 | +4,74% | 2.815,68 | 2.949,24 | +133,56 |
+| 10.12 | 103047 | Registro de esfera DN 20 | 2 | 22,83 | 24,01 | +5,17% | 58,16 | 61,18 | +3,02 |
+| 10.15 | 99624 | Retenção horizontal 2½" | 2 | 582,12 | 663,23 | +13,93% | 1.483,34 | 1.690,04 | +206,70 |
+| 10.16 | 99626 | Retenção horizontal 4" | 2 | 1.233,99 | 1.406,33 | +13,97% | 3.144,44 | 3.583,60 | +439,16 |
+| 10.17 | 99634 | Retenção vertical 4" | 2 | 858,75 | 978,25 | +13,92% | 2.188,26 | 2.492,76 | +304,50 |
+| 13.2 | 37556 | Placa fotolum. 20 × 20 (insumo) | 3 | 21,39 | 17,35 | −18,89% | 81,75 | 66,30 | −15,45 |
+| **Total** | | | | | | **+6,46%** | **79.608,58** | **84.749,26** | **+5.140,68** |
+
+(O total de 06/2025 inclui as 8 unidades do 10.11, R$ 1.072,64; sem elas dá os R$ 78.535,94 da seção 5.)
+
+**Leitura:**
+- **Nenhum item SINAPI do escopo mecânico ficou "muito abaixo hoje" por outro motivo que não a inflação.** A maior defasagem em R$ está no tê 75 × 50 (8.2.14, +R$ 827,40), na bucha 50 × 25 (8.2.25, +R$ 530,60) e nas retenções de bronze (10.15 a 10.17, +R$ 950,36 somadas). É matéria de **reajuste contratual**, não de prejuízo (critério da seção 2).
+- Itens que **caíram** de preço: 8.2.1, 8.2.2 e 8.2.7 (composições revisadas em 09/2026, descrição e coeficientes) e 13.2 (queda do preço do insumo 37556). Não muda nada na data-base.
+
+### 16.2 Códigos alterados ou desativados depois da data-base (Manutenções 09/2026)
+
+| Data | Código | Item | Manutenção |
+|---|---|---|---|
+| 10/2025 | 99837 | 6.5 guarda-corpo (fronteira) | **Desativação**; o código não aparece mais em 09/2026 |
+| 10/2025 | 106251 | (referência) guindauto 14,3 t | Criação com custo (R$ 373,13/h em 09/2026) |
+| 01/2026 | 92890 | 8.3.9 união galvanizada 2½" | Alteração de descrição e coeficientes |
+| 01/2026 | 101909 | (referência do 13.4) extintor PQS BC 6 kg | Alteração de descrição e coeficientes |
+| 09/2026 | 89383, 89401, 89402, 89404, 89408, 89427, 89428, 89450, 89451, 89452, 89505, 89513, 89613, 89614, 103953, 103999 | 8.2.1 a 8.2.5, 8.2.7 a 8.2.10, 8.2.13, 8.2.18, 8.2.20 a 8.2.22, 8.2.25 e a referência do 8.2.24 | Alteração de descrição e coeficientes |
+
+Nenhum código usado nos itens do escopo mecânico foi desativado. A revisão de 09/2026 não afeta a análise na data-base, mas qualquer **aditivo** com preço novo deve usar a composição revisada.
+
+### 16.3 Itens sem preço SINAPI direto, vistos em 09/2026
+
+| Item | 06/2025 | 09/2026 | Leitura |
+|---|---|---|---|
+| 6.1/6.2 guindaste 75 t sobre esteiras (102850/102851) | sem custo | **continua sem custo** | Materiais na operação foram de R$ 69,85 para R$ 79,64 (+14,0%); operador de R$ 28,93 para R$ 34,19 (+18,2%) |
+| Referência 30 t (89272/89273), mesmas 720 h, c/ BDI | 132.465,60 | 138.616,80 | O orçado (R$ 47.892,00) cobre 35% hoje e 36% na data-base: a defasagem é **anterior** à inflação |
+| Referência 60 t (93287/93288), mesmas 720 h, c/ BDI | 216.801,60 | 221.745,60 | Idem (22% hoje) |
+| 10.9 registro gaveta 2½" (ref. 94499) | 212,08 | 347,68 (+63,9%) | O insumo 6011 subiu de R$ 188,45 para R$ 321,59 sem mudança na composição. **Mesmo hoje** o orçado (≈ R$ 539,02) fica 1,55× acima |
+| 10.10 registro gaveta 4" (ref. 94501) | 512,93 | 852,66 (+66,2%) | O insumo 6027 subiu de R$ 475,38 para R$ 811,24. **Mesmo hoje** o orçado (≈ R$ 2.019,68) fica 2,37× acima |
+| 13.4 extintor (ref. BC 6 kg, 101909) | 267,42 | 260,84 (−2,5%) | Sem defasagem |
+| 8.2.24 bucha 32 × 25 (ref. 103953) | 7,62 | 8,49 (+11,4%) | O orçado (R$ 101,40) segue ≈ 12× a referência |
+| 1.13 caminhão de sucção (ref. 92106) | 373,15 | 412,29 (+10,5%) | O orçado (R$ 239,18/h) segue abaixo |
+
+**Efeito na seção 15.2 (H11):** se 10.9/10.10 forem de latão roscável, o ajuste a preço de 09/2026 seria −R$ 487,58 e −R$ 4.460,70 (−R$ 4.948,28). O ajuste correto continua sendo o da **data-base** (−R$ 6.592,35); o número de 09/2026 só mostra que o excesso não é explicado pela inflação.
+
+### 16.4 Resposta à pergunta 3 no escopo mecânico
+
+- **Abaixo do custo já na data-base (prejuízo real, não se resolve com reajuste):** só o guindaste 6.1/6.2, e o tamanho do prejuízo depende das horas do plano de içamento (seção 15.1). Itens fora do SINAPI (PRFV, equipamentos cotados) continuam NÃO VERIFICÁVEIS.
+- **Abaixo hoje só por inflação:** os itens SINAPI, +6,46% no conjunto (+R$ 5.140,68 c/ BDI). Resolve-se com o índice de reajuste do contrato (a confirmar).
+- **Acima mesmo hoje:** 8.2.24 (bucha) e, se forem de latão, os registros 10.9/10.10.
