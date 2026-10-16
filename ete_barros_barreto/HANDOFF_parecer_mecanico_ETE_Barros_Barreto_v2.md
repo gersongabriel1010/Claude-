@@ -617,3 +617,41 @@ Nenhum código usado nos itens do escopo mecânico foi desativado. A revisão de
 - **Abaixo do custo já na data-base (prejuízo real, não se resolve com reajuste):** só o guindaste 6.1/6.2, e o tamanho do prejuízo depende das horas do plano de içamento (seção 15.1). Itens fora do SINAPI (PRFV, equipamentos cotados) continuam NÃO VERIFICÁVEIS.
 - **Abaixo hoje só por inflação:** os itens SINAPI, +6,46% no conjunto (+R$ 5.140,68 c/ BDI). Resolve-se com o índice de reajuste do contrato (a confirmar).
 - **Acima mesmo hoje:** 8.2.24 (bucha) e, se forem de latão, os registros 10.9/10.10.
+
+---
+
+## 17. Sessão 2 (16/10/2026): planilha do projetista e memorial (ESP R00)
+
+### 17.1 Documentos recebidos
+- **Planilha do projetista:** `ORÇAMENTO ETE. BARROS BARRETO maio-2026 - entregue.xls` (Sanigy; data do orçamento 23/02/2026; SINAPI 11/2025 desonerado, ORSE 05/2025, SEDOP 10/2025, SICRO3 07/2025; total R$ 1.892.034,82). Tem as mesmas abas ocultas da planilha analisada (orçamento antigo de R$ 1.489.434,21 e curva ABC de 23/02/2026): mesma origem.
+- **Memorial:** `1. ESP ETE HOSPITAL UNIVERSITÁRIO JOÃO DE BARROS BARRETO R00.pdf` (Sanigy, julho/2025, 25 p.). Contratante do projeto: BM Serviço de Apoio Administrativo Ltda (CNPJ 23.941.500/0001-23). RT: Addyson Macedo Silva, CREA 1519212780/PA, ART PA20251354299. Normas citadas: NBR 12208/2020, NBR 12209/2011, CONAMA 357/2005 e 430/2011. **Só traz especificações:** as seções de cálculo do sumário não existem no arquivo (referências quebradas), então não há vazões nem demanda de ar.
+
+### 17.2 Comparação com a planilha do projetista (escopo mecânico)
+- Mesmos itens, códigos e fontes; os 36 códigos SINAPI deduzidos conferem. Grupo 12 idêntico ao centavo.
+- Total mecânico: analisada R$ 778.719,20 × projetista R$ 786.370,57 (−1,0%). Causas: 1.13 −13.016,16 (mesmo código EMBASA, sem explicação); mão de obra de instalação somada às cotações +5.882,04; 1.16 −1.152,55 (só mão de obra: 06/2025 × valores iguais aos de 09/2026); data-base SINAPI +777,52; outros −139,57.
+- Única quantidade divergente: 10.12 (2 na analisada, 1 no projetista). Pelo memorial, a analisada está certa (2 tanques de contato).
+- Os erros já apontados (BDI do PRFV, frete 12.3.6 ×2, 8.3.1, guindaste, soprador, filtro, 8.2.24, registros SEDOP) **estão na planilha do projetista**.
+- A planilha do projetista mistura data-bases de mão de obra entre composições e tem a composição 8 (10.11) com insumo "escavadeira hidráulica" num registro de PVC.
+- **Total geral:** analisada R$ 2.343.873,57 × projetista R$ 1.892.034,82 (+R$ 451.838,75, +23,9%), concentrado fora do escopo mecânico. Precisa da planilha analisada para localizar.
+
+### 17.3 O que o memorial muda
+
+| Item | Memorial diz | Efeito |
+|---|---|---|
+| 10.3 soprador | Compressor **existente** na ETE: CRC 2 820 36 TD HE, 10,33 m³/min, 16,9 cv, "pressão de operação 0,6 a 0,8 kgf/cm²". O Anexo II mostra **outro** modelo (CRC-2 520 46 TD HE, 3,45 kW, 4,58 m³/min, 3.400 mmCA) | Por que comprar 2? (até −R$ 24.987,56). O modelo do Anexo II não vence a lâmina de 3,90 m do FAS; a pressão do texto não bate com nenhum modelo; o cotado (JQT-7500, 40 kPa ≈ 4.080 mmCA) deixa pouca folga. **NÃO OK (incoerência projeto × orçamento)** |
+| 10.2 dosadora | EMEC FCE **existente**; hipoclorito de sódio; 1,5 L/h | Por que comprar 2? (até −R$ 3.299,14) |
+| 10.4 difusor | 140 un, disco bolhas finas, Vagalhões, 9 m³/h, PP/EPDM, **rosca macho ¾" BSP**, fixação em estrutura PRFV no fundo | Quantidade confirmada. Com rosca macho no difusor, a peça necessária é a luva com bucha de latão (8.2.13); o adaptador curto (8.2.20) tende a sobrar: −R$ 1.232,00 (hipótese forte). 140 × 9 = 1.260 m³/h é capacidade do difusor, não demanda (2 compressores CRC 2 820 somam 1.240 m³/h só na vazão máxima) |
+| Rede de ar | Interna PVC DN 75; **externa aço galvanizado 2½"** | 8.3.1 (tubo 3") **NÃO OK confirmado**: trocar por 2½" (SINAPI 94463): −R$ 1.611,60 |
+| 10.7 motobomba | Brava E30 3 cv **a adquirir**, EEE de esgoto bruto, 32,7 m³/h máx, Hm ≥ 14 mca, alternância | Função esclarecida: **OK** |
+| 10.16/10.17 retenções | EEE: **válvulas de retenção em ferro fundido** | Orçamento usa bronze roscável: **NÃO OK (especificação)**. Os 14 adaptadores com flange (8.2.23) são coerentes com válvulas flangeadas de ferro fundido |
+| 10.8 pall ring | 2", 14,70 m³ | Orçado 15 m³ e 2": **OK** (H9 resolvida) |
+| 10.11/10.13 | Dreno DN 60 com registro esfera em cada tanque | 8 drenos (2 UASB, 2 FAS, 2 DS, 2 TC) = 10.11 (8). Duplicidade enfraquece; confirmar os 13 do 10.13. **OK com ressalva** |
+| 10.12, 8.2.1, 8.2.7 | Tanque de contato: tubulação de verificação DN 20 com registro esfera | Explica os itens "resíduo"; 2 registros para 2 TC: **OK** |
+| 10.1 calha | Instalada em canal de concreto, com régua limnimétrica | A cotação com caixas de entrada e saída em PRFV pode duplicar o canal (até ≈ −R$ 3,1 mil); régua não encontrada no orçamento |
+| 12.1.1/12.1.2 | Separador, coletor de biogás, **defletor**, caixa distribuidora (8 saídas), anteparo de escuma, calha coletora e caixa dos amostradores de lodo, todos em PRFV | Defletor é peça distinta: risco de duplicidade do #10 cai. O 12.1.1 (projetista) inclui anteparo e calha. **Faltam no orçamento:** coletor de biogás (se não estiver no separador), caixa distribuidora, caixa dos amostradores |
+| 12.1.5 acesso | UASB com **acesso superior de 0,80 m** (sem acesso lateral) | O orçamento cobra lateral + superior: lateral sem previsão no projeto (até −R$ 8.738,44 nos 2 UASB, hipótese) |
+| Grupo 12 | Todos os tanques especificados como **fabricação nova** (filamento contínuo, parede 20 mm, liner epóxi, gelcoat UV). UASB Ø5,00 × 4,50 m; FAS Ø4,00 × 3,90 m; DS Ø4,00 × 3,85 m; TC Ø3,00 × 2,50 m | O orçamento trata UASB, FAS e TC como **reforma** (revestimento, gelcoat, acessos, montagem) e só o decantador como fornecimento. Contradição de escopo no grupo de R$ 493 mil. Áreas aproximadas (costado + fundo + topo): revestimento sai ≈ R$ 120/m² (UASB), R$ 157/m² (FAS), R$ 168/m² (TC), sem BDI |
+| Filtro de biogás | Ø1,00 × 0,60 m em PRFV, 50 kg de carvão ativado, tubulação PVC DN 75 | **Não orçado** (lacuna L1 confirmada) |
+| Preliminar | Grade inox 304 ou PRFV (2 cm, limpeza manual); caixa de areia com 2 canais e comportas de bypass em PRFV | Grade e comportas **não encontradas** na planilha do projetista |
+| Automação | Quadro de comando com seletoras, alternância, alarmes; boia de nível; recomenda interligar ao gerador | Só há quadros de distribuição; quadro de comando e boia **não encontrados** |
+| Decantador | Lodo recirculado para a EEE; calha coletora e fundo cônico em PRFV | Lacuna L2 parcialmente resolvida |
