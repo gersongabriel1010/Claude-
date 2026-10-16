@@ -671,3 +671,33 @@ Mesmo RT, ART e contratante do memorial (17.1). Acrescenta:
 | Decantador | Lodo por gravidade para a elevatória e daí ao UASB | Precisa de tubulação de retorno (confirmar no 8.1) |
 | Desinfecção | Dosadora ≈ 12,5 L/dia (≈ 0,52 L/h); reservatório de produto de 50 L; bombona de 50 L a cada 2 dias. Cita hipoclorito de sódio e, num trecho, de cálcio | Vazão dentro da FCE (1,5 L/h). Reservatório de 50 L não orçado (L8) |
 | Subprodutos sólidos | "Não contemplados no escopo do projeto" | Destinação por limpa-fossa; não é obra |
+
+### 17.5 Memorial descritivo e de cálculo (MD R00, Sanigy, julho/2025, 69 p.)
+É o documento com os cálculos que faltavam no ESP. Mesmo RT, ART e contratante. **Ele prevalece sobre o ESP onde os dois divergem.**
+
+**Fatos principais:**
+- **"Trata-se de uma ETE existente"; o projeto é de adequação, com aproveitamento das paredes dos tanques e adequação das partes internas.** Resolve a contradição da 17.3: o orçamento de **reforma** (revestimento, reforço interno, internos) está coerente com o projeto. O texto de "fabricação" do ESP é genérico.
+- Vazão 615 m³/d (média), 1.107 m³/d (máxima, 46,1 m³/h). Base: projeto Sanevias de 2011 e dados do contratante (12.300 hab. equivalentes × 50 L/d). DBO 900 mg/L, DQO 1.800 mg/L.
+- **UASB:** 2 módulos Ø5,00 × 4,50 m; separador trifásico Ø3,00 m; coletor de gases Ø1,20 m; **8 distribuidores por módulo**; biogás 126 m³/d. A taxa de aplicação superficial calculada (1,25 m³/m²·h) passa do limite que o próprio memorial atribui à NBR 12209 (1,20); o memorial reconhece e justifica.
+- **FAS:** 2 módulos Ø4,00 × 3,90 m. **Pall ring: 30% do volume útil de 49,01 m³ = 14,70 m³ — o volume útil é de um módulo**, então o total para 2 módulos seria 29,40 m³.
+- **Demanda de ar:** 7.865 Nm³/d = **5,46 Nm³/min (≈ 328 m³/h)**. Potência calculada 5,29 kW com descarga a 1,5 atm (≈ 5,2 m.c.a.). Compressor adotado: **CRC-2 820 36 TD HE (Asten), 10,33 m³/min, 16,9 cv, pressão máxima 4,70 m.c.a.**, com filtro de entrada e válvula de alívio. Quantidade não informada.
+- **Difusores:** Vagalhões P-250 EPDM, 9 m³/h, **70 por módulo, 140 no total**. O cálculo não liga o número à demanda: 328 m³/h ÷ 9 m³/h = 37 difusores.
+- **Decantador:** Ø4,00 m, lâmina 3,85 m (cilindro 1,55 + cone 2,30). O texto diz "1 módulo", mas a conta usa 2 (só fecha com 2): coerente com os 2 do orçamento.
+- **Tanque de contato:** calculado como **um** tanque Ø3,00 × 2,50 m com a vazão total (TDH 82,75 min).
+- **Elevatória:** recalque PVC DN 110, 29 m, Hman 13,0 m; perda de carga com 1 registro de gaveta e 2 retenções por bomba. Bomba Brava E30 3 cv adotada embora o cálculo dê 6,02 cv; o memorial diz que, nos picos, a bomba reserva entra junto.
+- **Desinfecção:** hipoclorito 12%, cloro residual 5 mg/L, ≈ 1,04 L/h, bombona de 50 L a cada 2 dias.
+- **Filtro de biogás:** Ø1,00 × 0,60 m, 50 kg de carvão. O cálculo de H₂S usa densidade de gás em kg/L (1.000× maior) e chega a troca do carvão a cada 7 dias; o manual fala em troca anual.
+
+**Efeito nos itens:**
+
+| Item | Antes | Agora | Impacto (c/ BDI) |
+|---|---|---|---|
+| Grupo 12 (escopo) | Contradição tanque novo × reforma | **Resolvida:** reforma de tanques existentes, como orçado | — |
+| 10.8 pall ring (15 m³) | OK | **Provável insuficiência:** 14,70 m³ é por módulo; total 29,40 m³ | até **+R$ 20.419,34** (14,4 m³ a R$ 1.418,01): abaixo, risco para a contratada |
+| 12.3.x tanque de contato (×2) | OK | **A confirmar:** o cálculo prevê **1** tanque; o 10.12 da planilha do projetista também tem 1 | até **−R$ 25.641,92** (metade de 12.3.1 a 12.3.5), além do frete do 12.3.6 |
+| 10.4 + acessórios (140) | OK com ressalva | **Quantidade sem justificativa no cálculo** (37 pela demanda de ar); pode haver critério de distribuição em planta não escrito | cada 100 pontos a menos ≈ −R$ 35.548,00 (difusor + tê + bucha + luva + adaptador) |
+| 10.3 soprador (×2) | NÃO OK | Modelo de projeto é o CRC-2 820; o ESP diz que já existe. A conta de potência supõe 5,2 m.c.a., acima do máximo do modelo (4,70); com 3,90 m de água sobre os difusores, falta a vazão na curva a ≈ 4,3–4,5 m.c.a. O JQT-7500 cotado (máx. ≈ 4,08 m.c.a.) provavelmente não atende | — |
+| 10.5 filtro (5 m³/min) | NÃO OK | Abaixo da demanda (5,46 Nm³/min) e da vazão máxima do compressor (10,33) | — |
+| 10.10, 10.16, 10.17 | — | 2 bombas × (1 gaveta + 2 retenções) = 2 gavetas e 4 retenções; o orçamento tem 3 gavetas e 4 retenções | 1 gaveta a confirmar |
+| L14 caixa distribuidora | Lacuna | 8 distribuidores por UASB no cálculo; segue sem item no orçamento | — |
+| L15 tanque de lodo | Lacuna | O cálculo dá volume de lodo para desaguamento (193,7 kg SS/d) mas não dimensiona tanque de lodo | — |
