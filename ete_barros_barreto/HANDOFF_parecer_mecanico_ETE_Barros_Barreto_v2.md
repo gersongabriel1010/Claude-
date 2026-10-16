@@ -655,3 +655,19 @@ Nenhum código usado nos itens do escopo mecânico foi desativado. A revisão de
 | Preliminar | Grade inox 304 ou PRFV (2 cm, limpeza manual); caixa de areia com 2 canais e comportas de bypass em PRFV | Grade e comportas **não encontradas** na planilha do projetista |
 | Automação | Quadro de comando com seletoras, alternância, alarmes; boia de nível; recomenda interligar ao gerador | Só há quadros de distribuição; quadro de comando e boia **não encontrados** |
 | Decantador | Lodo recirculado para a EEE; calha coletora e fundo cônico em PRFV | Lacuna L2 parcialmente resolvida |
+
+### 17.4 Manual de operação e manutenção (MO R00, Sanigy, julho/2025, 17 p.)
+Mesmo RT, ART e contratante do memorial (17.1). Acrescenta:
+
+| Assunto | Manual diz | Efeito |
+|---|---|---|
+| Vazão | 615 m³/dia (≈ 25,6 m³/h; 7,1 L/s) | Primeiro dado de vazão do projeto. TDH aproximado: 2 UASB ≈ 6,9 h; 2 FAS ≈ 3,8 h (cálculo meu, volumes do memorial) |
+| Elevatória | Bombas 1+1, boias de nível, quadro elétrico de comando das bombas, troca anual do cabo de aço | Confirma 10.7 (2 bombas). Quadro de comando, boias e cabo de içamento não encontrados no orçamento |
+| UASB, amostradores | 4 registros de amostragem (0,50; 1,00; 1,50; 2,00 m), dreno de fundo, dreno intermediário a 1,20 m e registro de escuma, por reator | 7 registros por UASB × 2 = 14, mais 6 drenos (2 FAS, 2 DS, 2 TC) = 20, além dos registros do tanque de lodo. Os 21 registros DN 60 (10.11 + 10.13) ficam plausíveis: a hipótese de duplicidade praticamente cai |
+| **Tanque de lodo** | Recebe o lodo de excesso do UASB; sobrenadante volta à elevatória por registros em várias alturas | **Unidade não especificada no memorial e não orçada.** Lacuna nova (L15) |
+| UASB | "Após a instalação do reator, teste de estanqueidade" | Reforça que o projeto prevê reator **novo** (contra a reforma orçada). Teste deve estar no comissionamento |
+| Biogás | Gás "comumente queimado"; unidade de tratamento de gases com troca anual do recheio | Coerente com o filtro de biogás (carvão) do memorial, que não está orçado |
+| FAS | Soprador em "casa de máquinas"; verificar "óleo e correias"; OD ≥ 2 mg/L semanal; pall ring com 100 m²/m³ | Compressor radial monobloco não tem correia: texto genérico. Casa de máquinas não verificada no orçamento (L5). **Pall ring de 14,70 m³ em 2 FAS de Ø4,00 m dá leito de ≈ 0,58 m por módulo**, baixo para filtro aerado submerso: conferir no cálculo (hipótese) |
+| Decantador | Lodo por gravidade para a elevatória e daí ao UASB | Precisa de tubulação de retorno (confirmar no 8.1) |
+| Desinfecção | Dosadora ≈ 12,5 L/dia (≈ 0,52 L/h); reservatório de produto de 50 L; bombona de 50 L a cada 2 dias. Cita hipoclorito de sódio e, num trecho, de cálcio | Vazão dentro da FCE (1,5 L/h). Reservatório de 50 L não orçado (L8) |
+| Subprodutos sólidos | "Não contemplados no escopo do projeto" | Destinação por limpa-fossa; não é obra |
