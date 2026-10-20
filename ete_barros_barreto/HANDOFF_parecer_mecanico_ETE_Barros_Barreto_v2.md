@@ -701,3 +701,34 @@ Mesmo RT, ART e contratante do memorial (17.1). Acrescenta:
 | 10.10, 10.16, 10.17 | — | 2 bombas × (1 gaveta + 2 retenções) = 2 gavetas e 4 retenções; o orçamento tem 3 gavetas e 4 retenções | 1 gaveta a confirmar |
 | L14 caixa distribuidora | Lacuna | 8 distribuidores por UASB no cálculo; segue sem item no orçamento | — |
 | L15 tanque de lodo | Lacuna | O cálculo dá volume de lodo para desaguamento (193,7 kg SS/d) mas não dimensiona tanque de lodo | — |
+
+---
+
+## 18. Sessão 2 (até 20/10/2026): apontamentos do fiscal e administração local
+
+### 18.1 Apontamentos feitos pelo usuário (planilha analisada, coluna I)
+| Item | Apontamento | Impacto c/ BDI |
+|---|---|---|
+| 1.16 | Excluir engenheiro civil da composição (já remunerado na administração local) | −6.030,57 (item passa a R$ 2.012,56) |
+| 10.3 | Item cotado diverge do descrito (print JQT-7500 × CRC 2820; ESP diz que o CRC 2820 já existe) | não quantificado |
+| 12.1.1 | BDI trocado → aquisição (montagem no 12.1.6) | −2.301,98 |
+| 12.1.2 | BDI trocado → aquisição (montagem no 12.1.6) | −2.151,88 |
+| 12.3.6 | Frete dobrado (proposta Biomais prevê 1) + BDI trocado | −2.081,10 |
+| 12.4.1 | BDI trocado → aquisição (ressalva: proposta diz "fornecimento e instalação") | −17.932,38 |
+| 12.4.2 | BDI trocado → aquisição | −1.246,30 |
+Base legal conferida no texto oficial: Decreto 7.983/2013, art. 9º §§ 1º e 2º (Planalto); Acórdão 2622/2013-TCU-Plenário, itens 9.1, 9.2.1, 9.2.2 e 9.3.2.2 (texto recebido do usuário). O acórdão traz faixas de referência ("mero fornecimento": 11,10/14,02/16,80%; redes de água e esgoto: 20,76/24,18/26,44%) e mostra que no fornecimento administração central e risco existem, mas menores.
+
+### 18.2 Administração local (itens 2.1 a 2.6, planilha analisada `ORÇAMENTO ETE. BARROS 062025 VENTO SUL.xlsx`, reanexada em 16/10)
+Grupo 2 = R$ 550.127,97 (projetista: R$ 257.594,19). 7 meses em todos os itens; cronograma de 6 meses (1/6 por mês). Adm. local = 23,35% do custo direto (TCU 3º quartil 10,89%; projetista declara 14,74%).
+| Item | Profissional | Fonte | R$/mês sem BDI | SINAPI-PA 06/2025 | Problema |
+|---|---|---|---|---|---|
+| 2.1 | Eng. civil pleno | SINAPI 93567 | 21.449,62 | 21.449,62 | OK |
+| 2.2 | Eletrotécnico | COMP-01 | 9.662,43 | 101401: 5.586,93 | composição própria com código SINAPI existente; salário 4.350 sem fonte; encargos 53,45% sobre base com complementares |
+| 2.3 | Almoxarife | "SINAPI" 93563 | 5.149,80 | 3.971,64 | + alimentação 988,66 + transporte 189,50 (o SINAPI 93563 não inclui) |
+| 2.4 | Encarregado geral | COMP-02 | 10.210,71 | 93572: 4.106,99 | idem 2.2; salário 5.000 sem fonte; transporte na base dos encargos sem linha |
+| 2.5 | Aux. técnico eng. | "SINAPI" 101390 | 5.969,80 | 4.791,64 | idem 2.3 |
+| 2.6 | Téc. edificações | COMP-03 (planilha diz COMP-04) | 9.240,18 | 100534: 3.781,36 | idem 2.2 |
+Impacto c/ BDI: preços SINAPI em 7 meses −160.486,41; SINAPI e 6 meses −216.149,49. O usuário optou por manter salários acima do SINAPI (retenção de pessoal): exige relatório técnico do art. 8º, parágrafo único, do Decreto 7.983/2013, com fontes de mercado; os erros de método (base dos encargos, rótulo SINAPI, inconsistências) precisam ser corrigidos de qualquer forma.
+
+### 18.3 Próximo passo combinado
+O usuário enviará (1) a planilha com os apontamentos para a contratada e (2) a planilha devolvida pela contratada. Conferir, item a item, se cada apontamento foi atendido, se a correção foi feita na base oculta `PL_Base_062025` (a aba visível calcula por PROCV), se não surgiram erros novos e se o resultado continua coerente com a planilha do projetista e com o memorial (MD/ESP/MO).
